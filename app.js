@@ -11,53 +11,56 @@ API Key
   Example
     http://www.omdbapi.com/?i=tt3896198&apikey=eff62d0a
 
+    fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=${apiKey}`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+
 
 TODO
-  +Sign up for API key
-  -update git
-  -create new branch before moving forward.
-  +make a variable for the API Key
+  -convert to async
+
+  -(1): add an if statement so that way if there are no results it does one thing and if there are results it does another.
+
+  +(2): change the for of loop to .map() so the results are in an array
+
+  -Render results on the page
 
 
 */
 
 const apiKey = 'eff62d0a'
 
-fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=${apiKey}`)
-  .then(res => res.json())
-  .then(data => console.log(data))
-
 // Call API by Search Result
 
-// TODO: convert to async
+async function getApiBySearch(){
+  const res = await fetch(`https://www.omdbapi.com/?s=the-housemaid&type=movie&apikey=${apiKey}`)
+  
+  const data = await res.json()
 
-fetch(`https://www.omdbapi.com/?s=the-housemaid&type=movie&apikey=${apiKey}`)
-  .then(res => res.json())
-  .then(data => {
     console.log(data)
 
-    // TODO: add an if statement so that way if there are no results it does one thing and if there are results it does another.
+    // TODO (1)
 
     getMoviesByImdbId(data.Search)
-  })
+}
 
-// Call API to get the individual movies by thei IMDB ID to get additional useful information
+getApiBySearch()
 
-function getMoviesByImdbId(movies){
+
+
+// Call API to get the individual movies by their IMDB ID to get additional useful information
+
+async function getMoviesByImdbId(movies){
 
   console.log('movies: ', movies)
-
-  // TODO: chage the for of loop to .map() so the results are in an array
-
-  for (let movie of movies){
-    console.log('movie: ', movie.imdbID)
-
+  
+  const moviePromises = movies.map(movie => 
     fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${apiKey}`)
       .then(res => res.json())
-      .then(data => {
-        console.log('data: ', data)
-        // TODO: Render results on the page
-      })
-  }
+  
+  ) //  Will I need a .join()?
 
+  const moviesByIdArray = await Promise.all(moviePromises)
+  console.log('Movies By Id Array:', moviesByIdArray)
+  return moviesByIdArray
 }
