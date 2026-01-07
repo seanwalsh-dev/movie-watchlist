@@ -1,0 +1,237 @@
+/* 
+
+TODO
+
+  -how to make a light or dark mode dependent on what the device is set to
+    https://www.google.com/search?q=how+to+make+a+light+or+dark+mode+dependent+on+what+the+device+is+set+to&rlz=1C1UEAD_enUS1111US1112&oq=how+to+make+a+light+or+dark+mode+dependent+on+what+the+device+is+set+to&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRiPAtIBCTI2Mzk4ajFqN6gCCLACAfEFJNKl8f9fkW8&sourceid=chrome&ie=UTF-8
+
+  -Maybe make 'Find your film' and 'My Watchlist' to be a toggle
+
+
+
+    */
+
+
+
+/* 
+
+********************
+
+GLOBAL SETTINGS
+
+********************
+
+*/
+
+* {
+  margin: 0;
+  box-sizing: border-box; 
+}
+
+/* 
+
+********************
+
+VARIABLES 
+
+********************
+
+*/
+
+/* 
+
+********************
+
+LAYOUT STRUCTURE 
+
+********************
+
+*/
+
+body {
+  background-color: black;
+}
+
+main {
+  max-width: 550px;
+  margin: auto;
+}
+
+#search-results-container {
+  outline: 1px solid green;
+  height: 70vh;
+}
+
+/* 
+
+********************
+
+TYPOGRAPHY 
+
+********************
+
+*/
+h1,
+nav a {
+  color: white;
+  font-family: "Inter", sans-serif;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight:bolder; 
+  margin: .50em;
+}
+
+nav a {
+  justify-content: right;
+  font-size: .75rem;
+  margin: 2em;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* 
+
+********************
+
+COMPONENTS 
+
+********************
+
+*/
+
+/* IMAGES */
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  opacity: 0.3;
+}
+
+.img-container {
+  width: 100%;
+  height: 26.7vh;
+  overflow: hidden;
+  background-color: black;
+  display: inline-block;
+  position: relative;
+}
+
+/* FORM */
+
+form {
+  position: absolute;
+  left: 50%;
+  top: 85%;
+  transform: translate(-50%, -50%); /* move form center up */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  background: rgba(20, 20, 20, 0.9);
+  padding: 0.75rem;
+  border-radius: 999px; /* pill shape */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+/* INPUT */
+
+input {
+  /* display: inline; */
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: white;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+
+  /* width: 100%; */
+  padding-left: 2.25rem; /* 👈 space for icon */
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  fill: rgba(255, 255, 255, 0.6);
+  pointer-events: none; /* input still clickable */
+}
+
+/* BUTTON */
+
+button {
+  background: #e50914; /* Netflix red */
+  color: white;
+  border: none;
+  border-radius: 999px;
+
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background: #f40612;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* 
+
+********************
+
+UTILITIES 
+
+********************
+
+*/
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    border: 0 !important;
+}
+
+/* 
+
+********************
+
+MEDIA QUERIES
+
+********************
+
+*/
+

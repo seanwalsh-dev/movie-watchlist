@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Movie Watchlist</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <!-- Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="favicon.png">
+</head>
+
+<!-- 
+
+Figma
+https://www.figma.com/design/jhFRdFIdHpRxsDznNXtpXw/Movie-Watchlist?node-id=2-17&t=CZHZvAWLQSKmWf6z-0
+
+https://www.figma.com/design/b2h2mh1nIcMpSUXEK2GlmB/Movie-Watchlist--Copy-?node-id=0-1&p=f&t=yLkZXfe3Rxf3F7dR-0
+
+
+TODO
+
+  -search page
+
+  -Calls OMDB API with the title searched for and displays search results
+
+  -Button to ‘add to watchlist’ which saves that data to local storage
+
+-->
+
+<body>
+  <main>
+    <header>
+      <div class="img-container">
+        <img 
+          src="/assets/movie-scene-banner.avif"
+          class="banner-img"
+          alt="tiles of classic movies"
+        >
+        <h1>Find your film</h1>
+        <nav>
+          <a href="watchlist.html">My Watchlist</a>
+        </nav>
+        <form action="/search-results.html" method="get">
+          <div class="input-wrapper">
+          <!-- Magnifying glass icon -->
+            <svg
+              class="search-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+            </svg>
+          <label for="movie-search" class="sr-only ">Search for a movie</label>
+          <input type="search" id="movie-search" name="q" placeholder="Search for a movie">
+          </div>
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      
+      
+    </header>
+    <section id="search-results-container">
+
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
