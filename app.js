@@ -16,12 +16,14 @@ TODO
   +Sign up for API key
   -update git
   -create new branch before moving forward.
-  -make a variable for the API Key
+  +make a variable for the API Key
 
 
 */
 
-fetch('https://www.omdbapi.com/?i=tt3896198&apikey=eff62d0a')
+const apiKey = 'eff62d0a'
+
+fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=${apiKey}`)
   .then(res => res.json())
   .then(data => console.log(data))
 
@@ -29,7 +31,7 @@ fetch('https://www.omdbapi.com/?i=tt3896198&apikey=eff62d0a')
 
 // TODO: convert to async
 
-fetch('https://www.omdbapi.com/?s=the-housemaid&type=movie&apikey=eff62d0a')
+fetch(`https://www.omdbapi.com/?s=the-housemaid&type=movie&apikey=${apiKey}`)
   .then(res => res.json())
   .then(data => {
     console.log(data)
@@ -50,7 +52,7 @@ function getMoviesByImdbId(movies){
   for (let movie of movies){
     console.log('movie: ', movie.imdbID)
 
-    fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=eff62d0a`)
+    fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${apiKey}`)
       .then(res => res.json())
       .then(data => {
         console.log('data: ', data)
