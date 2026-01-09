@@ -17,7 +17,7 @@ API Key
 
 
 TODO
-  -convert to async
+  +convert to async
 
   -(1): add an if statement so that way if there are no results it does one thing and if there are results it does another.
 
@@ -28,31 +28,42 @@ TODO
 
 */
 
+const movieSearch = document.getElementById('movie-search')
+const searchBtn = document.getElementById('search-btn')
+const form = document.getElementById('movie-search-form')
+
 const apiKey = 'eff62d0a'
+
+form.addEventListener('submit', handleSubmit)
+
+// getApiBySearch()
 
 // Call API by Search Result
 
-async function getApiBySearch(){
-  const res = await fetch(`https://www.omdbapi.com/?s=the-housemaid&type=movie&apikey=${apiKey}`)
+async function handleSubmit(e){
+
+  e.preventDefault()
+
+  const searchInput = movieSearch.value
+
+  const res = await fetch(`https://www.omdbapi.com/?s=${searchInput}&type=movie&apikey=${apiKey}`)
   
   const data = await res.json()
 
-    console.log(data)
+    // console.log(data)
 
     // TODO (1)
 
-    getMoviesByImdbId(data.Search)
+    getMoviesById(data.Search)
+
+    movieSearch.value = ''
 }
-
-getApiBySearch()
-
-
 
 // Call API to get the individual movies by their IMDB ID to get additional useful information
 
-async function getMoviesByImdbId(movies){
+async function getMoviesById(movies){
 
-  console.log('movies: ', movies)
+  // console.log('movies: ', movies)
   
   const moviePromises = movies.map(movie => 
     fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${apiKey}`)
