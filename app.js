@@ -17,13 +17,12 @@ API Key
 
 
 TODO
-  +convert to async
 
   -(1): add an if statement so that way if there are no results it does one thing and if there are results it does another.
 
-  +(2): change the for of loop to .map() so the results are in an array
+  
 
-  -Render results on the page
+  -watchlist click on and off.
 
 
 */
@@ -35,8 +34,6 @@ const form = document.getElementById('movie-search-form')
 const apiKey = 'eff62d0a'
 
 form.addEventListener('submit', handleSubmit)
-
-// getApiBySearch()
 
 // Call API by Search Result
 
@@ -73,5 +70,47 @@ async function getMoviesById(movies){
 
   const moviesByIdArray = await Promise.all(moviePromises)
   console.log('Movies By Id Array:', moviesByIdArray)
-  return moviesByIdArray
+  // return moviesByIdArray
+  renderSearch(moviesByIdArray)
+}
+
+function renderSearch(movies){
+  const html = 
+  movies.map(movie => 
+    `
+      
+
+      <div class="movie-container">
+        <div class="movie-poster-container test">
+          <img src="${movie.Poster}" class="movie-poster" alt="${movie.Title} movie poster">
+        </div>
+        <div class="movie-info-container test">
+          <div class="movie-title-container test">
+            <h2 class="movie-title">${movie.Title}</h2>
+            <p class="movie-stats">⭐ ${movie.imdbRating}</p>
+          </div>
+          <div class="movie-info-container test">
+            <p class="movie-stats flex space-between">
+              <span>${movie.Runtime}</span>
+              <span>Watchlist</span>
+            </p>
+            <p class="movie-stats flex">
+              <span>${movie.Genre}</span>
+            </p>
+          </div>
+          <div class="movie-description-container">
+            <p class="movie-description">${movie.Plot}</p>
+            
+          </div>
+        </div>
+      </div>
+    
+    `
+    
+  ).join('')
+
+  console.log(html)
+
+  document.getElementById('search-results-container').innerHTML = html
+
 }
