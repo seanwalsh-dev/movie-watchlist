@@ -47,11 +47,19 @@ async function handleSubmit(e){
   
   const data = await res.json()
 
-    // console.log(data)
+    console.log('data: ', data)
 
-    // TODO (1)
+//  WORKING HERE
 
-    getMoviesById(data.Search)
+    if(data.Response === 'True'){
+      getMoviesById(data.Search)
+    }
+    else if(data.Response === 'False'){
+      console.log('***  No movies found  ***')
+      renderSearch()
+    }
+
+    
 
     movieSearch.value = ''
 }
@@ -59,14 +67,11 @@ async function handleSubmit(e){
 // Call API to get the individual movies by their IMDB ID to get additional useful information
 
 async function getMoviesById(movies){
-
-  // console.log('movies: ', movies)
   
   const moviePromises = movies.map(movie => 
     fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${apiKey}`)
       .then(res => res.json())
-  
-  ) //  Will I need a .join()?
+  )
 
   const moviesByIdArray = await Promise.all(moviePromises)
   console.log('Movies By Id Array:', moviesByIdArray)
@@ -75,42 +80,52 @@ async function getMoviesById(movies){
 }
 
 function renderSearch(movies){
-  const html = 
-  movies.map(movie => 
-    `
-      
 
-      <div class="movie-container">
-        <div class="movie-poster-container test">
-          <img src="${movie.Poster}" class="movie-poster" alt="${movie.Title} movie poster">
-        </div>
-        <div class="movie-info-container test">
-          <div class="movie-title-container test">
-            <h2 class="movie-title">${movie.Title}</h2>
-            <p class="movie-stats">⭐ ${movie.imdbRating}</p>
+  let html
+
+  if(movies){
+    console.log('*** good movie search ***')
+    html = 
+    movies.map(movie => 
+      `
+        <div class="movie-container">
+          <div class="movie-poster-container test">
+            <img src="${movie.Poster}" class="movie-poster" alt="${movie.Title} movie poster">
           </div>
           <div class="movie-info-container test">
-            <p class="movie-stats flex space-between">
-              <span>${movie.Runtime}</span>
-              <span>Watchlist</span>
-            </p>
-            <p class="movie-stats flex">
-              <span>${movie.Genre}</span>
-            </p>
-          </div>
-          <div class="movie-description-container">
-            <p class="movie-description">${movie.Plot}</p>
-            
+            <div class="movie-title-container test">
+              <h2 class="movie-title">${movie.Title}</h2>
+              <p class="movie-stats">⭐ ${movie.imdbRating}</p>
+            </div>
+            <div class="movie-info-container test">
+              <p class="movie-stats flex space-between">
+                <span>${movie.Runtime}</span>
+                <span>Watchlist</span>
+              </p>
+              <p class="movie-stats flex">
+                <span>${movie.Genre}</span>
+              </p>
+            </div>
+            <div class="movie-description-container">
+              <p class="movie-description">${movie.Plot}</p>
+              
+            </div>
           </div>
         </div>
-      </div>
-    
-    `
-    
-  ).join('')
+      `
+    ).join('')
+  }
+  else if(!movies){
+    console.log('*** bad movie search ***')
 
-  console.log(html)
+    html = `
+      <p class="no-search-results">
+        Unable to find what you’re looking for.
+        <span>Please try another search.</span>
+      </p>`
 
+  }
+  
   document.getElementById('search-results-container').innerHTML = html
 
 }
