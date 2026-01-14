@@ -3,29 +3,12 @@
 API
 https://www.omdbapi.com/
 
-API Key
-  Here is your key: eff62d0a
+TODO:
 
-  Please append it to all of your API requests,
+BUG:
+  - doesn't stay (- Remove) when you switch searches
 
-  Example
-    http://www.omdbapi.com/?i=tt3896198&apikey=eff62d0a
-
-    fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=${apiKey}`)
-    .then(res => res.json())
-    .then(data => console.log(data))
-
-
-TODO
-
-  -(1): add an if statement so that way if there are no results it does one thing and if there are results it does another.
-
-  -Why doesn't text for false movie text work anymore?
-
-  
-
-  -watchlist click on and off.
-
+CHANGES:
 
 */
 
@@ -56,15 +39,11 @@ async function handleSubmit(e){
   
   const data = await res.json()
 
-  
-
-    console.log('data: ', data)
 
     if(data.Response === 'True'){
       getMoviesById(data.Search)
     }
     else if(data.Response === 'False'){
-      console.log('***  No movies found  ***')
       renderSearch()
     }
 
@@ -83,68 +62,60 @@ async function getMoviesById(movies){
   )
 
   const moviesByIdArray = await Promise.all(moviePromises)
-  console.log('Movies By Id Array:', moviesByIdArray)
-  // return moviesByIdArray
   moviesData = moviesByIdArray
   renderSearch(moviesByIdArray)
 }
 
 /*
-********************
-WORKING HERE
-********************
-
-
-
-TODO:
-
-  - create a button that toggles
-    - https://stackoverflow.com/questions/76837048/creating-the-simplest-html-toggle-button
-
-  -have it look the same as it does now
-
-  -push object to a watchlistArr
-
-CHANGES:
-
-  -app.js
-      - changed watchlist span to btn.
-      -changed dataset to id.
-  - style.css
-      - updated watchlist-btn style
-
+********************************************************************************
+                                    WORKING HERE
+********************************************************************************
 */
 
 
 
 htmlContainer.addEventListener('click', watchlistClick)
 
-function watchlistClick(e, data){
-  moviesData = data
-  console.log('md inside watchlistClick: ', moviesData)
+function watchlistClick(e){
 
-  console.log(e.target.id)
+// Testing console.logs
+  // console.log('md inside watchlistClick: ', moviesData)
+  // console.log('e.target.id: ', e.target.id)
 
-  if (!e.target.matches(".watchlist-btn")) return;
 
-  e.target.classList.toggle("active");
+  if (!e.target.matches(".watchlist-btn")) return;  // if not a watchlist btn, ignore
 
-  // const targetObj = html.filter((html) => html.includes(e.target.id))
+  e.target.classList.toggle("active");  // toggle on or off the active class
 
-  if (e.target.classList.contains("active")) {
-    e.target.textContent = "- Remove";
-    
-    watchlistArr.push(targetObj)
-    console.log(targetObj)
-    console.log('watchlistArr: ', watchlistArr)
+  if (e.target.classList.contains("active")) {  // If classlist has active
+    e.target.textContent = "- Remove";  // text = -Remove
+
+    const targetObj = moviesData.find(obj => obj.imdbID === e.target.id)
+
+    if (targetObj){ //  to protect against targetObj being undefined and pushing undefined to watchlistArr
+      watchlistArr.push(targetObj)
+    }
+  
+
+  
+
+  console.log('targetObj: ', targetObj)
+  console.log('watchlistArr: ', watchlistArr)
+
   } else {
     e.target.textContent = "+ Watchlist";
-//  PICK UP HERE: Why does updatedArr have no objects in it 
-    const updatedArr = watchlistArr.filter((obj) => obj.includes(e.target.id))
-    console.log('updatedArr: ', updatedArr)
-    watchlistArr = updatedArr
+
+    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id)
+
+    console.log('newArr: ', newArr)
+
+    watchlistArr = newArr
+
+    console.log('watchlistArr: ', watchlistArr)
     
   }
+
+  // TODO: add watchlistArr to localStorage
 }
 
 
@@ -153,7 +124,6 @@ function renderSearch(movies){
   // let html
 
   if(movies){
-    console.log('*** good movie search ***')
     html = movies.map(movie => 
       `
         <div class="movie-container">
