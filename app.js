@@ -20,6 +20,8 @@ TODO
 
   -(1): add an if statement so that way if there are no results it does one thing and if there are results it does another.
 
+  -Why doesn't text for false movie text work anymore?
+
   
 
   -watchlist click on and off.
@@ -30,8 +32,15 @@ TODO
 const movieSearch = document.getElementById('movie-search')
 const searchBtn = document.getElementById('search-btn')
 const form = document.getElementById('movie-search-form')
+const htmlContainer = document.getElementById('search-results-container')
 
 const apiKey = 'eff62d0a'
+
+let moviesData
+
+let watchlistArr =[]
+
+let html
 
 form.addEventListener('submit', handleSubmit)
 
@@ -47,9 +56,9 @@ async function handleSubmit(e){
   
   const data = await res.json()
 
-    console.log('data: ', data)
+  
 
-//  WORKING HERE
+    console.log('data: ', data)
 
     if(data.Response === 'True'){
       getMoviesById(data.Search)
@@ -76,17 +85,76 @@ async function getMoviesById(movies){
   const moviesByIdArray = await Promise.all(moviePromises)
   console.log('Movies By Id Array:', moviesByIdArray)
   // return moviesByIdArray
+  moviesData = moviesByIdArray
   renderSearch(moviesByIdArray)
 }
 
+/*
+********************
+WORKING HERE
+********************
+
+
+
+TODO:
+
+  - create a button that toggles
+    - https://stackoverflow.com/questions/76837048/creating-the-simplest-html-toggle-button
+
+  -have it look the same as it does now
+
+  -push object to a watchlistArr
+
+CHANGES:
+
+  -app.js
+      - changed watchlist span to btn.
+      -changed dataset to id.
+  - style.css
+      - updated watchlist-btn style
+
+*/
+
+
+
+htmlContainer.addEventListener('click', watchlistClick)
+
+function watchlistClick(e, data){
+  moviesData = data
+  console.log('md inside watchlistClick: ', moviesData)
+
+  console.log(e.target.id)
+
+  if (!e.target.matches(".watchlist-btn")) return;
+
+  e.target.classList.toggle("active");
+
+  // const targetObj = html.filter((html) => html.includes(e.target.id))
+
+  if (e.target.classList.contains("active")) {
+    e.target.textContent = "- Remove";
+    
+    watchlistArr.push(targetObj)
+    console.log(targetObj)
+    console.log('watchlistArr: ', watchlistArr)
+  } else {
+    e.target.textContent = "+ Watchlist";
+//  PICK UP HERE: Why does updatedArr have no objects in it 
+    const updatedArr = watchlistArr.filter((obj) => obj.includes(e.target.id))
+    console.log('updatedArr: ', updatedArr)
+    watchlistArr = updatedArr
+    
+  }
+}
+
+
 function renderSearch(movies){
 
-  let html
+  // let html
 
   if(movies){
     console.log('*** good movie search ***')
-    html = 
-    movies.map(movie => 
+    html = movies.map(movie => 
       `
         <div class="movie-container">
           <div class="movie-poster-container test">
@@ -98,11 +166,18 @@ function renderSearch(movies){
               <p class="movie-stats">⭐ ${movie.imdbRating}</p>
             </div>
             <div class="movie-info-container test">
-              <p class="movie-stats flex space-between">
+              <p class="movie-stats space-between">
                 <span>${movie.Runtime}</span>
-                <span>Watchlist</span>
+                <button
+                  type="button"
+                  id="${movie.imdbID}"
+                  class="watchlist-btn"
+                  aria-pressed="false"
+                >
+                  + Watchlist
+                </button>
               </p>
-              <p class="movie-stats flex">
+              <p class="movie-stats">
                 <span>${movie.Genre}</span>
               </p>
             </div>
@@ -114,9 +189,10 @@ function renderSearch(movies){
         </div>
       `
     ).join('')
+
+    
   }
   else if(!movies){
-    console.log('*** bad movie search ***')
 
     html = `
       <p class="no-search-results">
@@ -126,6 +202,6 @@ function renderSearch(movies){
 
   }
   
-  document.getElementById('search-results-container').innerHTML = html
+  htmlContainer.innerHTML = html
 
 }
