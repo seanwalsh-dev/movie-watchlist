@@ -13,87 +13,7 @@ BUG:
   + doesn't stay (- Remove) when you switch searches
 
 CHANGES:
-  "app.js: - Remove now stays rendered when you switch searches, removed adding boolean to moviesData, fixed watchlistClick"
-
-
-
-HARD CODE OBJECT:
-{
-Actors
-: 
-"Roy Scheider, Robert Shaw, Richard Dreyfuss",
-Awards
-: 
-"Won 3 Oscars. 16 wins & 20 nominations total",
-BoxOffice
-: 
-"$280,083,300",
-Country
-: 
-"United States",
-DVD
-: 
-"N/A",
-Director
-: 
-"Steven Spielberg",
-Genre
-: 
-"Adventure, Horror, Thriller",
-Language
-: 
-"English",
-Metascore
-: 
-"87",
-Plot
-: 
-"When a massive killer shark unleashes chaos on a beach community off Long Island, it's up to the local police chief, a marine biologist, and an old seafarer to hunt the beast down.",
-Poster
-: 
-"https://m.media-amazon.com/images/M/MV5BYjViNDQzNmUtYzkxZi00NTk5LTljMmItYjJlZmZkODIxNjU1XkEyXkFqcGc@._V1_SX300.jpg",
-Production
-: 
-"N/A",
-Rated
-: 
-"PG",
-Released
-: 
-"20 Jun 1975",
-Response
-: 
-"True",
-Runtime
-: 
-"124 min",
-Title
-: 
-"Jaws",
-Type
-: 
-"movie",
-Website
-: 
-"N/A",
-Writer
-: 
-"Peter Benchley, Carl Gottlieb",
-Year
-: 
-"1975",
-imdbID
-: 
-"tt0073195",
-imdbRating
-: 
-"8.1",
-imdbVotes
-: 
-"726,762",
-isOnWatchlist
-: 
-false }
+  "app.js: added saving and retriving watchlistArr in localStorage"
 
 */
 
@@ -106,7 +26,9 @@ const apiKey = 'eff62d0a'
 
 let moviesData
 
-let watchlistArr =[]
+let watchlistArr = getFromLocalStorage() || []
+
+console.log('watchlist: ', watchlistArr)
 
 let html
 
@@ -235,4 +157,16 @@ function watchlistClick(e){
   }
   renderSearch(moviesData)
 //  TODO: add watchlistArr to localStorage
+  saveInLocalStorage()
+  // console.log(getFromLocalStorage())
 }
+
+function saveInLocalStorage() {
+  localStorage.setItem('watchlist', JSON.stringify(watchlistArr))
+}
+
+function getFromLocalStorage() {
+  return JSON.parse(localStorage.getItem('watchlist'))
+}
+
+
