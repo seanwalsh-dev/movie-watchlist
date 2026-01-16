@@ -4,11 +4,96 @@ API
 https://www.omdbapi.com/
 
 TODO:
+  + Fix remove bug
+  - add to localStorage
+  - begin watchlist.html
+  - Remove isOnWatchlist
 
 BUG:
-  - doesn't stay (- Remove) when you switch searches
+  + doesn't stay (- Remove) when you switch searches
 
 CHANGES:
+  "app.js: - Remove now stays rendered when you switch searches, removed adding boolean to moviesData, fixed watchlistClick"
+
+
+
+HARD CODE OBJECT:
+{
+Actors
+: 
+"Roy Scheider, Robert Shaw, Richard Dreyfuss",
+Awards
+: 
+"Won 3 Oscars. 16 wins & 20 nominations total",
+BoxOffice
+: 
+"$280,083,300",
+Country
+: 
+"United States",
+DVD
+: 
+"N/A",
+Director
+: 
+"Steven Spielberg",
+Genre
+: 
+"Adventure, Horror, Thriller",
+Language
+: 
+"English",
+Metascore
+: 
+"87",
+Plot
+: 
+"When a massive killer shark unleashes chaos on a beach community off Long Island, it's up to the local police chief, a marine biologist, and an old seafarer to hunt the beast down.",
+Poster
+: 
+"https://m.media-amazon.com/images/M/MV5BYjViNDQzNmUtYzkxZi00NTk5LTljMmItYjJlZmZkODIxNjU1XkEyXkFqcGc@._V1_SX300.jpg",
+Production
+: 
+"N/A",
+Rated
+: 
+"PG",
+Released
+: 
+"20 Jun 1975",
+Response
+: 
+"True",
+Runtime
+: 
+"124 min",
+Title
+: 
+"Jaws",
+Type
+: 
+"movie",
+Website
+: 
+"N/A",
+Writer
+: 
+"Peter Benchley, Carl Gottlieb",
+Year
+: 
+"1975",
+imdbID
+: 
+"tt0073195",
+imdbRating
+: 
+"8.1",
+imdbVotes
+: 
+"726,762",
+isOnWatchlist
+: 
+false }
 
 */
 
@@ -63,69 +148,16 @@ async function getMoviesById(movies){
 
   const moviesByIdArray = await Promise.all(moviePromises)
   moviesData = moviesByIdArray
-  renderSearch(moviesByIdArray)
+  renderSearch(moviesData)
 }
 
-/*
-********************************************************************************
-                                    WORKING HERE
-********************************************************************************
-*/
+function renderSearch(movies){  //  renders search results
+  if(movies){ //  if the search was successful and has results
+    html = movies.map(movie => {
 
-
-
-htmlContainer.addEventListener('click', watchlistClick)
-
-function watchlistClick(e){
-
-// Testing console.logs
-  // console.log('md inside watchlistClick: ', moviesData)
-  // console.log('e.target.id: ', e.target.id)
-
-
-  if (!e.target.matches(".watchlist-btn")) return;  // if not a watchlist btn, ignore
-
-  e.target.classList.toggle("active");  // toggle on or off the active class
-
-  if (e.target.classList.contains("active")) {  // If classlist has active
-    e.target.textContent = "- Remove";  // text = -Remove
-
-    const targetObj = moviesData.find(obj => obj.imdbID === e.target.id)
-
-    if (targetObj){ //  to protect against targetObj being undefined and pushing undefined to watchlistArr
-      watchlistArr.push(targetObj)
-    }
-  
-
-  
-
-  console.log('targetObj: ', targetObj)
-  console.log('watchlistArr: ', watchlistArr)
-
-  } else {
-    e.target.textContent = "+ Watchlist";
-
-    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id)
-
-    console.log('newArr: ', newArr)
-
-    watchlistArr = newArr
-
-    console.log('watchlistArr: ', watchlistArr)
-    
-  }
-
-  // TODO: add watchlistArr to localStorage
-}
-
-
-function renderSearch(movies){
-
-  // let html
-
-  if(movies){
-    html = movies.map(movie => 
-      `
+      const isOnWatchlist = watchlistArr.some(obj => obj.imdbID === movie.imdbID) //  Boolean: returns true if there is an obj in watchlistArr with the same imdbId as the currnet movie in moviesData.  Returns false if there is not
+                                                                                  //  returns the html code to html
+      return `                                                                    
         <div class="movie-container">
           <div class="movie-poster-container test">
             <img src="${movie.Poster}" class="movie-poster" alt="${movie.Title} movie poster">
@@ -141,10 +173,10 @@ function renderSearch(movies){
                 <button
                   type="button"
                   id="${movie.imdbID}"
-                  class="watchlist-btn"
-                  aria-pressed="false"
+                  class="watchlist-btn ${(isOnWatchlist) ? 'active' : ''}"
+                  aria-pressed="${isOnWatchlist}"
                 >
-                  + Watchlist
+                  ${(isOnWatchlist) ? '- Remove' : '+ Watchlist'}
                 </button>
               </p>
               <p class="movie-stats">
@@ -158,12 +190,15 @@ function renderSearch(movies){
           </div>
         </div>
       `
-    ).join('')
+      
+    }).join('')                                                                 //  indicates how the itmes of html will be joined
+
+    
 
     
   }
-  else if(!movies){
-
+  else if(!movies){                                                             //  if the search was not successful and does not have results
+                                                                                //  html code for unsuccessful movie searches 
     html = `
       <p class="no-search-results">
         Unable to find what you’re looking for.
@@ -172,6 +207,32 @@ function renderSearch(movies){
 
   }
   
-  htmlContainer.innerHTML = html
+  htmlContainer.innerHTML = html                                                //  htmlContainer will display html
 
+  /*
+********************************************************************************
+                                    WORKING HERE
+********************************************************************************
+*/
+
+}
+
+htmlContainer.addEventListener('click', watchlistClick)
+
+function watchlistClick(e){
+  if (!e.target.matches(".watchlist-btn")) return;                        // if not a watchlist btn, ignore
+
+  const targetObj = moviesData.find(obj => obj.imdbID === e.target.id)    //  targetObj is the obj in moviesData with the same (imdb)id as the button clicked
+
+  if (watchlistArr.find(obj => obj.imdbID === targetObj.imdbID)){         //  If there is a movie in watchlistArr that has the same imdbID
+    // remove from watchlist
+    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id) //  create a new arr without the obj that has the same (imdb)id as the button clicked
+    watchlistArr = newArr                                                 //  watchlist now equals the new arr with the removed obj
+  }else{                                                                  //  If there is not a movie in watchlistArr that has the same imdbID
+    // add to watchlist
+    watchlistArr.push(targetObj)                                          //  add the target obj to watchlistArr
+    
+  }
+  renderSearch(moviesData)
+//  TODO: add watchlistArr to localStorage
 }
