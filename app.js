@@ -225,3 +225,63 @@ function getFromLocalStorage() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (htmlContainer) htmlContainer.addEventListener('click', bothClick)
+if (watchlistContainer) watchlistContainer.addEventListener('click', bothClick)
+
+function bothClick(e) {
+  if (!e.target.matches(".watchlist-btn")) return; // if not a watchlist btn, ignore
+
+  const section = e.target.closest("section")
+  let targetObj
+
+  if (htmlContainer)
+    targetObj = moviesData.find(obj => obj.imdbID === e.target.id) // different
+    // targetObj is the obj in moviesData with the same (imdb)id as the button clicked
+
+  if (
+    watchlistArr.find(
+      obj =>
+        obj.imdbID ===
+        (section.id === 'search-results-container')
+          ? targetObj.imdbID
+          : e.target.id
+    )
+  ) {
+    // If there is a movie in watchlistArr that has the same imdbID
+    // remove from watchlist
+    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id)
+    // create a new arr without the obj that has the same (imdb)id as the button clicked
+    watchlistArr = newArr
+    // watchlist now equals the new arr with the removed obj
+  } else {
+    // If there is not a movie in watchlistArr that has the same imdbID
+    // add to watchlist
+    watchlistArr.push(targetObj)
+    // add the target obj to watchlistArr
+  }
+
+  if (htmlContainer) renderSearch(moviesData)
+  renderWatchlist(watchlistArr)
+  saveInLocalStorage()
+}
