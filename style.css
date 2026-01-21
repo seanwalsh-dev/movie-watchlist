@@ -98,6 +98,40 @@ nav a {
   font-weight: bold;
 }
 
+
+.marquee::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle, #f4e9d8 35%, transparent 36%) repeat;
+  background-size: 20px 20px;
+  opacity: 0.8;
+  z-index: -1;
+  filter: drop-shadow(0 0 4px rgba(244, 233, 216, 0.4));
+}
+
+.site-title {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: 3.2rem;
+  letter-spacing: 0.35em;
+  padding-left: 0.35em; /* optical centering */
+  text-transform: uppercase;
+  color: #f4e9d8;
+  margin: 0;
+}
+
+@keyframes marquee-flicker {
+  0%, 100% { opacity: 1; }
+  97% { opacity: 0.95; }
+  98% { opacity: 0.85; }
+  99% { opacity: 1; }
+}
+
+.site-title {
+  animation: marquee-flicker 6s infinite;
+}
 /* 
 
 ********************
@@ -491,4 +525,17 @@ MEDIA QUERIES
 ********************
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
