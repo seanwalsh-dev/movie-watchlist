@@ -132,12 +132,6 @@ function renderSearch(movies){  //  renders search results
   htmlContainer.innerHTML = html                                                //  htmlContainer will display html
 }
 
-  /*
-********************************************************************************
-                                    WORKING HERE
-********************************************************************************
-*/
-
 function renderWatchlist(movies) {
   
   let html
@@ -161,127 +155,61 @@ renderWatchlist(watchlistArr)
 
 
 
+document.addEventListener('click', addRemoveClick)
 
-
-
-
-
-if(htmlContainer) htmlContainer.addEventListener('click', htmlClick)
-
-
-function htmlClick(e){
-  if (!e.target.matches(".watchlist-btn")) return;                        // if not a watchlist btn, ignore
-  console.log('moviesData: ', moviesData)
-  const targetObj = moviesData.find(obj => obj.imdbID === e.target.id) // different    //  targetObj is the obj in moviesData with the same (imdb)id as the button clicked
-
-  if (watchlistArr.find(obj => obj.imdbID === targetObj.imdbID)){// different         //  If there is a movie in watchlistArr that has the same imdbID
-    // remove from watchlist
-    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id) //  create a new arr without the obj that has the same (imdb)id as the button clicked
-    watchlistArr = newArr                                                 //  watchlist now equals the new arr with the removed obj
-  }else{                                                                  //  If there is not a movie in watchlistArr that has the same imdbID
-    // add to watchlist
-    watchlistArr.push(targetObj)                                          //  add the target obj to watchlistArr
-    
-  }
-  renderSearch(moviesData)
-  renderWatchlist(watchlistArr)
-  saveInLocalStorage()
-
-}
-
-function saveInLocalStorage() {
-  localStorage.setItem('watchlist', JSON.stringify(watchlistArr))
-}
-
-function getFromLocalStorage() {
-  return JSON.parse(localStorage.getItem('watchlist'))
-}
-
-
-if(watchlistContainer) watchlistContainer.addEventListener('click', watchlistClick)
-
-function watchlistClick(e){
-  if (!e.target.matches(".watchlist-btn")) return; // same                        // if not a watchlist btn, ignore
-  console.log('moviesData: ', moviesData)
+function addRemoveClick(e) {
+  if (!e.target.matches(".watchlist-btn")) return;                                      // if not a watchlist btn, ignore
   
-  if (watchlistArr.find(obj => obj.imdbID === e.target.id)){ //different         //  If there is a movie in watchlistArr that has the same imdbID
-    // remove from watchlist
-    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id) //  create a new arr without the obj that has the same (imdb)id as the button clicked
-    watchlistArr = newArr                                                 //  watchlist now equals the new arr with the removed obj
-  }
-  // renderSearch(moviesData)
-  renderWatchlist(watchlistArr)
-  saveInLocalStorage()
-
-}
-
-function saveInLocalStorage() {
-  localStorage.setItem('watchlist', JSON.stringify(watchlistArr))
-}
-
-function getFromLocalStorage() {
-  return JSON.parse(localStorage.getItem('watchlist'))
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if (htmlContainer) htmlContainer.addEventListener('click', bothClick)
-if (watchlistContainer) watchlistContainer.addEventListener('click', bothClick)
-
-function bothClick(e) {
-  if (!e.target.matches(".watchlist-btn")) return; // if not a watchlist btn, ignore
-
   const section = e.target.closest("section")
   let targetObj
 
-  if (htmlContainer)
-    targetObj = moviesData.find(obj => obj.imdbID === e.target.id) // different
-    // targetObj is the obj in moviesData with the same (imdb)id as the button clicked
+  if (htmlContainer) targetObj = moviesData.find(obj => obj.imdbID === e.target.id)     // if the click happens in the htmlContainer, targetObj is the obj in moviesData with the same (imdb)id as the button clicked
 
-  if (
-    watchlistArr.find(
-      obj =>
-        obj.imdbID ===
-        (section.id === 'search-results-container')
-          ? targetObj.imdbID
-          : e.target.id
-    )
-  ) {
-    // If there is a movie in watchlistArr that has the same imdbID
+  if (watchlistArr.find(obj => obj.imdbID === e.target.id)) {                           // If there is a movie in watchlistArr that has the same ID as the button that was clicked
     // remove from watchlist
-    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id)
-    // create a new arr without the obj that has the same (imdb)id as the button clicked
-    watchlistArr = newArr
-    // watchlist now equals the new arr with the removed obj
-  } else {
-    // If there is not a movie in watchlistArr that has the same imdbID
+    const newArr = watchlistArr.filter(obj => obj.imdbID !== e.target.id)               // create a new arr without the obj that has the same (imdb)id as the button clicked
+    watchlistArr = newArr                                                               // watchlist now equals the new arr with the removed obj
+  } else {                                                                              // If there is not a movie in watchlistArr that has the same imdbID
     // add to watchlist
-    watchlistArr.push(targetObj)
-    // add the target obj to watchlistArr
+    watchlistArr.push(targetObj)                                                        // add the target obj to watchlistArr
   }
 
   if (htmlContainer) renderSearch(moviesData)
   renderWatchlist(watchlistArr)
   saveInLocalStorage()
 }
+
+
+
+function saveInLocalStorage() {
+  localStorage.setItem('watchlist', JSON.stringify(watchlistArr))
+}
+
+function getFromLocalStorage() {
+  return JSON.parse(localStorage.getItem('watchlist'))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
